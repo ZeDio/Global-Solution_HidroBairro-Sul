@@ -1,0 +1,8 @@
+# Arquivos de compilacao
+build/
+*.bin
+*.elf
+
+# Arquivos temporarios
+*.log
+*.tmp
