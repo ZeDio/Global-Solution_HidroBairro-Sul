@@ -6,3 +6,9 @@ build/
 # Arquivos temporarios
 *.log
 *.tmp
+*.env
+.env
+# Arquivos de credenciais
+.env
+.env.*
+!.env.example

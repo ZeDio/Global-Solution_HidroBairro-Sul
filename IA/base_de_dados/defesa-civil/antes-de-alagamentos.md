@@ -14,7 +14,7 @@
 
 ## 3. Monitoramento e Alertas
 * **Acompanhe os Canais Oficiais:** Fique atento aos boletins meteorológicos emitidos pelo **CGE (Centro de Gerenciamento de Emergências Climáticas)** e pelos alertas oficiais da **Defesa Civil**.
-* **Utilize o HidroBairro Sul:** Consulte o chatbot do projeto para verificar o status dos pontos monitorados em Campo Limpo, Capão Redondo e M'Boi Mirim antes de sair de casa em dias de tempestade.
+* **Utilize o HidroBairro Sul:** O chatbot do projeto pode oferecer orientações gerais de prevenção. Enquanto não houver sensores instalados e integração operacional com dados atualizados, ele não confirma o status de ruas ou pontos de monitoramento. Para alertas atuais, consulte os canais oficiais da Defesa Civil e do CGE.
 
 ## 4. Fontes e Referências Oficiais
 * **Defesa Civil do Estado de São Paulo:** [Defesa Civil SP](https://www.defesacivil.sp.gov.br) — Manuais de prevenção e gestão de riscos.

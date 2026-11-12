@@ -7,19 +7,21 @@
 * **Limites Regionais:** Faz divisa com os distritos de Vila Andrade, Capão Redondo, Jardim São Luís e com o município de Taboão da Serra.
 * **Características Urbanas:** Região altamente urbanizada, marcada por vales fluviais, forte adensamento populacional, ocupações em encostas e proximidade com cursos d'água importantes da bacia hidrográfica local.
 
-## 2. Pontos Monitorados (HidroBairro Sul)
-*Este documento mapeia os locais estratégicos monitorados pelo sistema para identificação antecipada de risco de transbordo ou acúmulo crítico de água:*
-* **Ponto CL-01 (Trecho crítico de córrego / via principal):** Monitoramento do nível de escoamento e proximidade de transbordo em áreas de fundo de vale.
-* **Ponto CL-02 (Área de escoamento de encosta/rua inclinada):** Sensor voltado para o acompanhamento de fluxo rápido de águas pluviais durante temporais intensos.
-* *(Nota de calibração):* Os dados brutos captados pelos sensores IoT são convertidos pela API do sistema em níveis relativos de alerta para apoiar a tomada de decisão da IA.
+## 2. Áreas de referência para estudo (proposta do projeto)
+
+Os identificadores abaixo são referências conceituais utilizadas no planejamento do HidroBairro Sul. Eles **não representam sensores instalados, endereços confirmados ou pontos oficialmente mapeados**. A escolha de locais reais depende de levantamento de campo, consulta a dados oficiais, autorização e georreferenciamento.
+
+* **CL-01 e CL-02:** códigos de referência para possíveis áreas de estudo de drenagem e acúmulo de água nesta região. Não associe esses códigos a uma rua específica sem validação documental e geográfica.
+* **Situação atual:** o projeto possui um protótipo IoT com ESP32 e sensor ultrassônico HC-SR04 em ambiente de simulação Wokwi. Não há, com base nas informações atuais do projeto, comprovação de sensores instalados em campo nem de medições públicas em tempo real.
+* **Limitação:** uma leitura ultrassônica mede distância até uma superfície. Para estimar nível de água, é necessária instalação fixa, referência física conhecida, calibração e validação local.
 
 ## 3. Histórico de Ocorrências de Alagamento
 * **Eventos Recorrentes:** A região apresenta episódios históricos de transbordamento de córregos e formação de pontos de alagamento intransitáveis durante chuvas de forte intensidade e curta duração.
 
-## 4. Vias com Registros Históricos de Inundação / Pontos Críticos
-*Trechos que exigem atenção redobrada dos moradores e onde o tráfego de veículos e pedestres costuma ser interrompido durante tempestades:*
-* Proximidades de vias de grande circulação cortadas por fundos de vale na região.
-* Cruzamentos e trechos baixos próximos a canais e córregos locais.
+## 4. Características que exigem atenção e validação local
+*As descrições a seguir são características gerais para orientar levantamentos. Não constituem uma lista confirmada de ruas alagáveis nem substituem mapas e registros oficiais:*
+* Áreas baixas, fundos de vale e vias próximas a cursos d’água devem ser avaliadas com base em registros oficiais e vistoria local.
+* Cruzamentos e trechos com drenagem deficiente precisam de confirmação por histórico de ocorrências e dados municipais.
 * *Aviso aos moradores:* Evitar transitar a pé ou de carro por vias com lâminas d'água superiores a 20 cm, mesmo que o fluxo pareça fraco.
 
 ## 5. Orientações de Segurança Específicas para Campo Limpo

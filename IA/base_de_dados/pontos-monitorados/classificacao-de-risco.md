@@ -1,35 +1,38 @@
 # Classificação de Risco (HidroBairro Sul)
 
-## 1. Objetivo da Classificação
-Estabelecer critérios padronizados para categorizar as leituras dos sensores IoT e os boletins meteorológicos, permitindo que o chatbot com RAG e a API Java diferenciem situações de normalidade, atenção, alerta e risco iminente de alagamento.
+## 1. Objetivo e status
 
-## 2. Níveis de Alerta e Critérios de Criticidade
+Este documento descreve uma **proposta de classificação futura** para apoiar o projeto. Os níveis abaixo não estão ativos e não representam alertas reais. A aplicação depende de sensores instalados e calibrados, critérios definidos com dados de campo, integração operacional com a API Java e validação técnica.
+
+## 2. Categorias propostas
 
 ### Nível 1: Normalidade (Verde)
-* **Condição do Sensor:** Leituras dentro da normalidade, com nível de água abaixo dos limites críticos de segurança.
-* **Condição Climática:** Sem chuvas expressivas ou previsões de temporais severos na região.
-* **Orientação da IA:** Informar que o monitoramento está estável e orientar sobre práticas preventivas cotidianas.
+
+Categoria planejada para condições dentro dos parâmetros de referência validados. Não deve ser inferida apenas pela ausência de uma leitura crítica.
 
 ### Nível 2: Atenção (Amarelo)
-* **Condição do Sensor:** Início de elevação no nível de escoamento captado pelo sensor (redução significativa da distância medida em relação à referência).
-* **Condição Climática:** Chuvas moderadas a fortes registradas na região ou alertas de precipitação emitidos pelos órgãos competentes.
-* **Orientação da IA:** Recomendar cautela aos moradores próximos ao ponto monitorado e lembrá-los de evitar descartar lixo em locais inadequados que possam entupir bueiros.
+
+Categoria planejada para condições que indiquem necessidade de cautela, considerando leituras consistentes, histórico local e informações meteorológicas confiáveis.
 
 ### Nível 3: Alerta (Laranja)
-* **Condição do Sensor:** Nível de água próximo ao limite de transbordo ou lâmina d'água significativa detectada na via/fundo de vale monitorado.
-* **Condição Climática:** Tempestades intensas com acumulados elevados em curto período de tempo.
-* **Orientação da IA:** Alertar sobre o risco iminente de alagamento no trecho, desaconselhar transitar pela via afetada e sugerir rotas alternativas seguras.
 
-### Nível 4: Risco Elevado / Alagamento Iminente (Vermelho)
-* **Condição do Sensor:** Leitura indicando transbordo do curso d'água ou acúmulo crítico de água na via monitorada.
-* **Condição Climática:** Temporais severos contínuos.
-* **Orientação da IA:** Acionar protocolos de emergência, orientar o morador a buscar locais elevados imediatamente, não tentar cruzar áreas alagadas a pé ou de carro e fornecer contatos da Defesa Civil e Bombeiros.
+Categoria planejada para condições que exijam evitar a área potencialmente afetada e acompanhar orientações oficiais. Os limites deverão ser definidos e validados para cada instalação.
 
-## 3. Diretrizes para a Resposta do Chatbot
-* **Transparência:** A IA deve sempre esclarecer qual é o nível de alerta atual do ponto monitorado consultado na API Java.
-* **Segurança em Primeiro Lugar:** A IA nunca deve garantir que um trajeto está totalmente seguro caso haja dados de alerta ativos ou incertezas nas vias.
+### Nível 4: Risco elevado (Vermelho)
 
-## 4. Fontes e Referências Oficiais
-* **Centro de Gerenciamento de Emergências Climáticas (CGE):** [CGE SP](https://www.cgesp.org) — Parâmetros de criticidade e classificação de índices pluviométricos e alagamentos na capital.
-* **Defesa Civil do Estado de São Paulo:** [Defesa Civil SP](https://www.defesacivil.sp.gov.br) — Protocolos de emissão de alertas e gestão de desastres.
-* **Centro Nacional de Monitoramento e Alertas de Desastres Naturais (CEMADEN):** [CEMADEN](https://www.gov.br/cemaden) — Metodologias de monitoramento e alertas de risco hidrológico.
+Categoria planejada para situações graves confirmadas por critérios técnicos e fontes confiáveis. A resposta deve priorizar orientações oficiais de emergência.
+
+## 3. Regras de interpretação
+
+- O HC-SR04 mede distância física até uma superfície; não mede diretamente chuva, vazão ou risco de inundação.
+- A conversão de distância em altura de água depende de referência fixa e calibração local.
+- Não definir limites numéricos sem medições e validação em campo.
+- Cada dado deve possuir identificação do sensor, horário, unidade, validade e estado de comunicação.
+- A IA só pode informar um nível atual quando receber uma resposta válida e recente de uma fonte operacional identificada.
+- A IA nunca deve garantir que uma rua ou trajeto está seguro.
+
+## 4. Fontes e referências
+
+- [CGE SP](https://www.cgesp.org) — informações meteorológicas e monitoramento da cidade de São Paulo.
+- [Defesa Civil do Estado de São Paulo](https://www.defesacivil.sp.gov.br) — orientações e alertas oficiais.
+- [CEMADEN](https://www.gov.br/cemaden) — informações sobre monitoramento e alertas de desastres naturais.

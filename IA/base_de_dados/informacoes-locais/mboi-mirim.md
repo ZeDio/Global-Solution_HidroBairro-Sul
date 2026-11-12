@@ -7,19 +7,21 @@
 * **Limites Regionais:** Faz divisa com os distritos de Campo Limpo, Cidade Dutra, Vila Andrade e com os municípios de Itapecerica da Serra e Embu das Artes.
 * **Características Urbanas:** Região com forte densidade populacional, vales fluviais associados a importantes bacias hidrográficas locais (como a bacia da Represa de Guarapiranga) e áreas de proteção ambiental e mananciais, apresentando desafios próprios de drenagem e escoamento urbano.
 
-## 2. Pontos Monitorados (HidroBairro Sul)
-*Este documento mapeia os locais estratégicos monitorados pelo sistema para identificação antecipada de risco de transbordo ou acúmulo crítico de água na região:*
-* **Ponto MM-01 (Trecho crítico de fundo de vale / eixo de drenagem principal):** Monitoramento do nível de escoamento e proximidade de transbordo em áreas de planície aluvial e vias marginais a córregos.
-* **Ponto MM-02 (Ponto de acúmulo pluvial em via de grande circulação):** Sensor voltado para o acompanhamento do volume de água em cruzamentos e trechos com estrangulamento de galerias pluviais.
-* *(Nota de calibração):* Os dados brutos captados pelos sensores IoT são convertidos pela API do sistema em níveis relativos de alerta para apoiar a tomada de decisão da IA.
+## 2. Áreas de referência para estudo (proposta do projeto)
+
+Os identificadores abaixo são referências conceituais utilizadas no planejamento do HidroBairro Sul. Eles **não representam sensores instalados, endereços confirmados ou pontos oficialmente mapeados**. A escolha de locais reais depende de levantamento de campo, consulta a dados oficiais, autorização e georreferenciamento.
+
+* **MM-01 e MM-02:** códigos de referência para possíveis áreas de estudo de drenagem e acúmulo de água nesta região. Não associe esses códigos a uma rua específica sem validação documental e geográfica.
+* **Situação atual:** o projeto possui um protótipo IoT com ESP32 e sensor ultrassônico HC-SR04 em ambiente de simulação Wokwi. Não há, com base nas informações atuais do projeto, comprovação de sensores instalados em campo nem de medições públicas em tempo real.
+* **Limitação:** uma leitura ultrassônica mede distância até uma superfície. Para estimar nível de água, é necessária instalação fixa, referência física conhecida, calibração e validação local.
 
 ## 3. Histórico de Ocorrências de Alagamento
 * **Eventos Recorrentes:** A região registra pontos históricos de alagamento e enxurradas em vias troncais durante temporais severos de verão ou frentes frias prolongadas, potencializados pelo relevo acidentado e pela alta taxa de impermeabilização urbana em trechos consolidados.
 
-## 4. Vias com Registros Históricos de Inundação / Pontos Críticos
-*Trechos que exigem atenção redobrada dos moradores e onde o tráfego de veículos e pedestres costuma ser interrompido durante tempestades:*
-* Vias de ligação e avenidas principais cortadas por fundos de vale ou próximas a canais de drenagem na área da subprefeitura.
-* Cruzamentos de baixa declividade com histórico de formação rápida de lâminas d'água.
+## 4. Características que exigem atenção e validação local
+*As descrições a seguir são características gerais para orientar levantamentos. Não constituem uma lista confirmada de ruas alagáveis nem substituem mapas e registros oficiais:*
+* Vias de ligação e avenidas próximas a fundos de vale podem ser avaliadas em levantamentos oficiais e de campo.
+* Cruzamentos de baixa declividade podem ser avaliados, sem presumir ocorrência ou risco sem evidências.
 * *Aviso aos moradores:* Evitar transitar a pé ou de carro por vias com lâminas d'água superiores a 20 cm, mesmo que o fluxo pareça fraco.
 
 ## 5. Orientações de Segurança Específicas para M'Boi Mirim
