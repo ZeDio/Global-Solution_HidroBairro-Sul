@@ -35,10 +35,20 @@ def ask(dados: PerguntaRequest):
 
     try:
         resposta, trechos = responder_com_rag(pergunta, k=dados.k)
-        fontes = [
-            {"titulo": t["titulo"], "fonte": t["fonte"], "similaridade": round(t["similaridade"], 4)}
-            for t in trechos
-        ]
+        
+        fontes = []
+        vistos = set()
+        for t in trechos:
+            if t["fonte"] not in vistos:
+                vistos.add(t["fonte"])
+                fontes.append({
+                    "titulo": t["titulo"], 
+                    "fonte": t["fonte"], 
+                    "similaridade": round(t["similaridade"], 4)
+                })
+            if len(fontes) == 3: # Limita a no máximo 3 referências (mude para 2 se preferir)
+                break
+                
         return {"projeto": "HidroBairro Sul", "resposta": resposta, "fontes": fontes}
     except Exception as erro:
         print(f"Erro no endpoint /ask: {type(erro).__name__}: {erro}")

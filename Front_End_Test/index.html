@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HidroBairro Sul - Assistente Virtual</title>
+  <style>
+    :root {
+      /* Paleta HidroBairro Sul */
+      --primary-dark: #0A2540;
+      --primary-blue: #0077B6;
+      --accent-cyan: #00B4D8;
+      --bg-light: #F0F4F8;
+      --surface-white: #FFFFFF;
+      --text-main: #1E293B;
+      --text-muted: #64748B;
+      --border-color: #CBD5E1;
+      --ref-bg: #E0F2FE;
+      --ref-text: #0369A1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 16px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 760px;
+      height: 90vh;
+      background: var(--surface-white);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(10, 37, 64, 0.12);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Cabeçalho */
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+      color: white;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .chat-header span {
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    /* Área de Mensagens */
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 82%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      line-height: 1.5;
+      font-size: 0.95rem;
+      position: relative;
+      white-space: pre-wrap;
+      text-align: left !important;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background-color: var(--primary-blue);
+      color: white;
+      border-bottom-right-radius: 2px;
+      text-align: left !important;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      border-bottom-left-radius: 2px;
+    }
+
+    .message.loading {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Bloco de Referências */
+    .references-box {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .references-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .reference-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .reference-tag {
+      background-color: var(--ref-bg);
+      color: var(--ref-text);
+      border: 1px solid #BAE6FD;
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .reference-tag:hover {
+      background-color: #bae6fd;
+      border-color: #7dd3fc;
+      text-decoration: underline;
+    }
+
+    /* Área de Input */
+    .chat-input-area {
+      padding: 16px 20px;
+      background: var(--surface-white);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .chat-input-area input:focus {
+      border-color: var(--primary-blue);
+    }
+
+    .chat-input-area button {
+      background-color: var(--primary-blue);
+      color: white;
+      border: none;
+      padding: 0 22px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .chat-input-area button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .chat-input-area button:disabled {
+      background-color: var(--text-muted);
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <h1>HidroBairro Sul • Assistente RAG</h1>
+      <span>API Online (Render)</span>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot">
+Olá! Pergunte algo sobre o monitoramento hídrico, prevenção de enchentes ou infraestrutura do HidroBairro Sul.
+      </div>
+    </div>
+
+    <form class="chat-input-area" id="chatForm">
+      <input 
+        type="text" 
+        id="userInput" 
+        placeholder="Digite sua dúvida aqui..." 
+        autocomplete="off" 
+        required
+      />
+      <button type="submit" id="sendBtn">Enviar</button>
+    </form>
+  </div>
+
+  <script>
+    const chatForm = document.getElementById('chatForm');
+    const userInput = document.getElementById('userInput');
+    const chatMessages = document.getElementById('chatMessages');
+    const sendBtn = document.getElementById('sendBtn');
+
+    const API_URL = 'https://global-solution-hidrobairro-sul.onrender.com/ask';
+
+    function appendMessage(text, sender, references = [], isLoading = false) {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message', sender);
+      if (isLoading) msgDiv.classList.add('loading');
+
+      const textP = document.createElement('p');
+      textP.textContent = text;
+      msgDiv.appendChild(textP);
+
+      if (sender === 'bot' && Array.isArray(references) && references.length > 0) {
+        const refBox = document.createElement('div');
+        refBox.classList.add('references-box');
+
+        const refTitle = document.createElement('span');
+        refTitle.classList.add('references-title');
+        refTitle.textContent = 'Fontes & Referências:';
+        refBox.appendChild(refTitle);
+
+        const refList = document.createElement('div');
+        refList.classList.add('reference-list');
+
+        references.forEach(ref => {
+          // Criamos uma tag <a> para o link funcionar ao clicar
+          const tag = document.createElement('a');
+          tag.classList.add('reference-tag');
+          
+          let nome = 'Documento';
+          let pag = '';
+          
+          if (typeof ref === 'string') {
+            nome = ref;
+          } else if (typeof ref === 'object' && ref !== null) {
+            nome = ref.fonte || ref.source || ref.arquivo || 'Documento';
+            pag = ref.pagina || ref.page ? ` (Pág. ${ref.pagina || ref.page})` : '';
+          }
+
+          tag.textContent = `📄 ${nome}${pag}`;
+          tag.href = `https://github.com/ZeDio/Global-Solution_HidroBairro-Sul/blob/main/IA/base_de_dados/${nome}`;
+          tag.target = '_blank';
+          tag.rel = 'noopener noreferrer';
+
+          refList.appendChild(tag);
+        });
+
+        refBox.appendChild(refList);
+        msgDiv.appendChild(refBox);
+      }
+
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return msgDiv;
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = userInput.value.trim();
+      if (!question) return;
+
+      appendMessage(question, 'user');
+      userInput.value = '';
+      sendBtn.disabled = true;
+
+      const loadingMsg = appendMessage(
+        'Consultando base de conhecimento... (a primeira resposta pode levar ~40s se o Render estiver iniciando)',
+        'bot',
+        [],
+        true
+      );
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pergunta: question })
+        });
+
+        loadingMsg.remove();
+
+        if (!response.ok) {
+          throw new Error(`Erro HTTP ${response.status} (${response.statusText})`);
+        }
+
+        const data = await response.json();
+        
+        const botReply = data.resposta || data.answer || data.response || JSON.stringify(data);
+        const botRefs = data.referencias || data.references || data.sources || data.fontes || [];
+
+        appendMessage(botReply, 'bot', botRefs);
+
+      } catch (error) {
+        loadingMsg.remove();
+        appendMessage(
+          `❌ Falha ao consultar a API: ${error.message}\n\nVerifique se o endpoint (${API_URL}) e o CORS no servidor estão configurados.`,
+          'bot'
+        );
+      } finally {
+        sendBtn.disabled = false;
+        userInput.focus();
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -36,7 +36,7 @@ def interagir_com_hidrobairro():
         try:
             resposta, fontes = responder_com_rag(
                 pergunta,
-                k=5,
+                k=3,
             )
 
             print("\n" + "-" * 55)
