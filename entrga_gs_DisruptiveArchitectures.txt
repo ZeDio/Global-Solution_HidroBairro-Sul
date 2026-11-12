@@ -1,0 +1,12 @@
+- Integrantes -
+Arthur Dos Santos
+Bruno Martins
+Júlia Tiziotto
+José Diogo
+Mariana Xavier
+
+- Links De Entrega -
+Repositório no GitHub: https://github.com/ZeDio/Global-Solution_HidroBairro-Sul
+Simulação IoT (Wokwi): https://wokwi.com/projects/480341974696549377
+API de Inteligência Artificial (Render): https://global-solution-hidrobairro-sul.onrender.com/
+Interface Web / Front-end (Vercel): https://hidrobairro-sul.vercel.app/
