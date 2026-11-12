@@ -6,7 +6,16 @@ O projeto integra tecnologias de **Internet das Coisas (IoT)** e **Inteligência
 
 A solução utiliza um ESP32 com sensor ultrassônico HC-SR04, uma API IoT, uma camada de Inteligência Artificial desenvolvida em Python e uma arquitetura de integração com uma API Java.
 
-> **Status atual:** o protótipo IoT está em desenvolvimento e simulação no Wokwi. A API de IA já foi executada e testada localmente, com índice RAG gerado e integração com Gemini funcionando. A API Java está em desenvolvimento e a publicação da API de IA no Render está planejada.
+> **Status atual:** o protótipo IoT está em simulação no Wokwi. A API de IA foi publicada no Render com índice RAG gerado e integração com Gemini funcionando, além de contar com uma interface web de testes publicada na Vercel. A API Java está em desenvolvimento.
+
+---
+
+## 🔗 Links do Projeto
+
+- **Interface Web / Front-end (Vercel):** https://hidrobairro-sul.vercel.app/
+- **API de Inteligência Artificial (Render):** https://global-solution-hidrobairro-sul.onrender.com/
+- **Simulação IoT (Wokwi):** https://wokwi.com/projects/480341974696549377
+- **Repositório no GitHub:** https://github.com/ZeDio/Global-Solution_HidroBairro-Sul
 
 ---
 
@@ -30,6 +39,7 @@ O projeto está dividido em três componentes principais:
 - Desenvolver uma API de Inteligência Artificial especializada em prevenção de alagamentos.
 - Implementar uma arquitetura RAG para consultar documentos do projeto.
 - Integrar o Gemini para geração de embeddings e respostas.
+- Disponibilizar a API de IA no Render e uma interface web de testes na Vercel.
 - Preparar a comunicação entre IoT, API Java e Inteligência Artificial.
 
 ---
@@ -64,9 +74,11 @@ A documentação da IA reúne informações relacionadas às regiões, orientaç
 | RAG | Recuperação de informações da base documental |
 | NumPy | Operações numéricas |
 | python-dotenv | Gerenciamento de variáveis de ambiente |
+| HTML / CSS / JS | Interface web de testes do assistente (`Front_End_Test`) |
+| Vercel | Hospedagem do front-end de testes |
+| Render | Hospedagem da API de IA |
 | Java | Backend de integração, em desenvolvimento |
 | Oracle Database | Banco de dados previsto para o projeto |
-| Render | Hospedagem planejada para a API de IA |
 
 ---
 
@@ -91,7 +103,7 @@ O protótipo IoT utiliza:
 | ECHO | GPIO 18 |
 | GND | GND |
 
-O circuito é desenvolvido e testado utilizando o simulador Wokwi.
+O circuito é desenvolvido e testado utilizando o simulador Wokwi: https://wokwi.com/projects/480341974696549377.
 
 **Atenção:** antes de uma montagem física, é necessário verificar a compatibilidade elétrica dos sinais do HC-SR04 com o ESP32, especialmente o nível lógico do pino ECHO.
 
@@ -171,7 +183,7 @@ A camada de Inteligência Artificial foi desenvolvida em Python e utiliza FastAP
 
 O sistema utiliza o Google Gemini para gerar embeddings e respostas, enquanto a arquitetura RAG permite recuperar informações relevantes da base documental antes da geração de uma resposta.
 
-O objetivo é disponibilizar um assistente especializado em prevenção de alagamentos, orientações de segurança e informações relacionadas às regiões atendidas pelo projeto.
+O assistente conta com instruções de sistema (`SYSTEM_PROMPT.py`) ajustadas para priorizar respostas diretas, objetivas e sem saudações longas, além de filtrar e limitar a exibição de até 3 fontes únicas consultadas por resposta na API (`api.py`).
 
 ## 🧠 Arquitetura RAG
 
@@ -189,7 +201,7 @@ Essa arquitetura permite que a IA consulte uma base documental própria antes de
 6. O recuperador compara a pergunta com os documentos indexados.
 7. Os trechos mais relevantes são selecionados.
 8. O pipeline envia a pergunta e o contexto recuperado ao Gemini.
-9. A API retorna a resposta e as fontes utilizadas.
+9. A API retorna a resposta e as fontes utilizadas (limitadas às principais referências únicas).
 
 ### Fluxo de processamento
 
@@ -271,9 +283,7 @@ O módulo `rag/retriever.py` é responsável por localizar os trechos mais relev
 
 A recuperação utiliza embeddings e similaridade de cosseno para comparar semanticamente a pergunta com os documentos indexados.
 
-O parâmetro `k` permite definir a quantidade de trechos recuperados.
-
-O sistema também retorna informações sobre as fontes utilizadas, permitindo identificar quais documentos contribuíram para a resposta.
+O parâmetro `k` permite definir a quantidade de trechos recuperados. Na API (`api.py`), as fontes retornadas ao usuário passam por deduplicação e são limitadas a até 3 documentos de referência para manter a interface limpa.
 
 ## 📝 Geração do índice RAG
 
@@ -310,7 +320,7 @@ O índice deve ser atualizado quando os documentos da base de conhecimento forem
 
 A camada de IA disponibiliza seus recursos por meio de uma API desenvolvida com FastAPI.
 
-O servidor é executado utilizando Uvicorn.
+O servidor é executado utilizando Uvicorn e está publicado em: https://global-solution-hidrobairro-sul.onrender.com/
 
 ### Endpoints principais
 
@@ -414,79 +424,12 @@ O conteúdo acima representa apenas o formato da resposta. Os textos e valores r
 
 A API disponibiliza uma documentação interativa por meio do Swagger.
 
-Com o servidor local em execução, acesse:
-
-```text
-http://127.0.0.1:8000/docs
-```
+- **Ambiente publicado:** https://global-solution-hidrobairro-sul.onrender.com/docs
+- **Ambiente local:** `http://127.0.0.1:8000/docs`
 
 Pelo Swagger é possível visualizar os endpoints, enviar requisições e consultar as respostas retornadas pela API.
 
----
-
-# 🔗 Parte 4 — Integração entre IoT, Java e IA
-
-A arquitetura do HidroBairro Sul prevê a integração dos componentes por meio da API Java.
-
-### Fluxo geral previsto
-
-```text
-           SENSOR HC-SR04
-                  |
-                  v
-                ESP32
-                  |
-                  v
-             API IoT
-                  |
-             Requisição GET
-                  |
-                  v
-               API JAVA
-                  |
-          +-------+-------+
-          |               |
-          v               v
-       API IA        Aplicação
-      (FastAPI)      / Dashboard
-          |
-          v
-       RAG + Gemini
-          |
-          v
-     Resposta + Fontes
-```
-
-### Responsabilidades
-
-**IoT — ESP32**
-- Realizar medições de distância.
-- Atualizar as informações do sensor.
-- Disponibilizar os dados por HTTP.
-
-**API Java**
-- Consultar os dados disponibilizados pela IoT.
-- Centralizar a comunicação entre os componentes.
-- Aplicar as regras de negócio.
-- Integrar a aplicação com a camada de IA.
-
-**API de Inteligência Artificial**
-- Receber perguntas.
-- Recuperar informações da base documental.
-- Gerar respostas utilizando o Gemini.
-- Retornar as fontes consultadas.
-
-### Situação da integração
-
-A API de IA já foi executada e testada localmente.
-
-A API Java ainda está em desenvolvimento. A integração entre as duas APIs e a utilização de dados dinâmicos dos sensores ainda precisam ser implementadas e validadas.
-
-O RAG não deve ser tratado como uma fonte de telemetria em tempo real.
-
----
-
-# 🚀 Parte 5 — Como executar o projeto
+# 🚀 Parte 4 — Como executar o projeto
 
 ## Pré-requisitos
 
@@ -537,7 +480,7 @@ IA/
 ## 1. Clonar o repositório
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone [https://github.com/ZeDio/Global-Solution_HidroBairro-Sul.git](https://github.com/ZeDio/Global-Solution_HidroBairro-Sul.git)
 ```
 
 Entre na pasta principal do projeto:
@@ -605,7 +548,7 @@ IA/AI/.env
 Adicione a variável:
 
 ```env
-GEMINI_API_KEY=sua_chave_aqui
+API_KEY=sua_chave_aqui
 ```
 
 Substitua `sua_chave_aqui` pela chave da sua conta Google Gemini.
@@ -694,7 +637,7 @@ Ctrl + C
 
 ## 9. Testar a IA pelo Swagger
 
-1. Acesse `http://127.0.0.1:8000/docs`.
+1. Acesse `http://127.0.0.1:8000/docs` (ou `https://global-solution-hidrobairro-sul.onrender.com/docs`).
 2. Localize `POST /ask`.
 3. Clique em **Try it out**.
 4. Insira:
@@ -739,31 +682,22 @@ python -m uvicorn api:app --reload --host 127.0.0.1 --port 8000
 
 ---
 
-# ☁️ Parte 6 — Publicação da API no Render
+# ☁️ Parte 6 — Publicação da API no Render e Front-end na Vercel
 
-A publicação da API de Inteligência Artificial no Render está planejada e será realizada após a preparação da implantação.
+A publicação da API de Inteligência Artificial no Render e da interface web de testes na Vercel já foi concluída e está ativa.
 
-### Etapas previstas
+### Ambientes publicados
 
-1. Preparar o repositório com os arquivos necessários.
-2. Configurar a versão do Python.
-3. Garantir a instalação das dependências.
-4. Configurar a variável `GEMINI_API_KEY` no painel do Render.
-5. Definir o comando de inicialização da aplicação.
-6. Garantir que o índice RAG esteja disponível no ambiente publicado.
-7. Testar os endpoints utilizando a URL pública.
-8. Configurar as origens permitidas no CORS.
-9. Validar o funcionamento da API Java com a API de IA publicada.
+- **Interface Web (Vercel):** https://hidrobairro-sul.vercel.app/
+- **API de Inteligência Artificial (Render):** https://global-solution-hidrobairro-sul.onrender.com/
+- **Documentação Swagger (Render):** https://global-solution-hidrobairro-sul.onrender.com/docs
 
-### Cuidados na publicação
+### Detalhes da implantação
 
-A chave Gemini deve ser cadastrada como variável de ambiente no Render, nunca diretamente no código ou no repositório.
-
-O endereço `127.0.0.1` representa apenas a máquina local. Depois da publicação, a API Java deverá utilizar a URL pública fornecida pelo Render.
-
-Também será necessário garantir que o índice RAG esteja presente no ambiente de produção. O arquivo gerado localmente não deve ser considerado automaticamente disponível no servidor hospedado.
-
-**Status:** publicação ainda não realizada.
+1. Configuração da variável de ambiente `GEMINI_API_KEY` diretamente no painel do Render (sem expor credenciais no repositório).
+2. Disponibilização do índice RAG (`AI/rag/data/index.json`) no ambiente de produção.
+3. Configuração de CORS na API FastAPI para permitir requisições vindas do front-end hospedado na Vercel.
+4. Criação de interface web (`Front_End_Test/index.html`) conectada à API do Render para testes em tempo real com o assistente.
 
 ---
 
@@ -773,6 +707,9 @@ Estrutura principal documentada:
 
 ```text
 Global-Solution_HidroBairro-Sul/
+│
+├── Front_End_Test/
+│   └── index.html
 │
 ├── IA/
 │   │
@@ -802,7 +739,7 @@ Global-Solution_HidroBairro-Sul/
 │           └── data/
 │               └── index.json
 │
-└── IOT/
+└── IoT/
     ├── sketch.ino
     ├── diagram.json
     ├── libraries.txt
@@ -814,12 +751,12 @@ Global-Solution_HidroBairro-Sul/
 
 | Arquivo | Responsabilidade |
 |---|---|
-| `api.py` | Define a aplicação FastAPI e seus endpoints |
+| `api.py` | Define a aplicação FastAPI, seus endpoints e o filtro de fontes únicas |
 | `config.py` | Centraliza configurações, caminhos e modelos |
 | `schemas.py` | Define os modelos de dados da API |
 | `content_api.py` | Implementa as rotas de disponibilização de materiais |
 | `tools.py` | Reúne ferramentas utilizadas pela IA |
-| `SYSTEM_PROMPT.py` | Define as instruções de comportamento do assistente |
+| `SYSTEM_PROMPT.py` | Define as instruções de comportamento, concisão e segurança do assistente |
 | `main.py` | Permite executar a interação pelo terminal |
 | `rag/indexer.py` | Lê documentos e constrói o índice |
 | `rag/embeddings.py` | Responsável pela geração de embeddings |
@@ -831,7 +768,7 @@ Global-Solution_HidroBairro-Sul/
 
 # 🧪 Parte 8 — Testes realizados
 
-Durante o desenvolvimento, foram realizados testes locais para validar a camada de Inteligência Artificial.
+Durante o desenvolvimento, foram realizados testes locais e em produção para validar a camada de Inteligência Artificial.
 
 ### Resultados obtidos
 
@@ -849,7 +786,9 @@ Durante o desenvolvimento, foram realizados testes locais para validar a camada 
 | Endpoint `GET /rag/status` | HTTP 200 |
 | Endpoint `POST /ask` | HTTP 200 |
 | Resposta do Gemini | Sucesso |
-| Retorno das fontes documentais | Sucesso |
+| Retorno das fontes documentais (deduplicadas e limitadas a 3) | Sucesso |
+| Deploy da API no Render | Concluído e online |
+| Deploy da interface de testes na Vercel | Concluído e integrado à API |
 
 ### Resultado da geração do índice
 
@@ -865,13 +804,13 @@ Total de chunks: 24
 
 ### Resultado da API
 
-A API respondeu corretamente às requisições realizadas pelo Swagger.
+A API respondeu corretamente às requisições realizadas pelo Swagger e pela interface web na Vercel.
 
 O endpoint `POST /ask` retornou:
 
 - Nome do projeto.
-- Resposta gerada pelo Gemini.
-- Fontes documentais consultadas.
+- Resposta gerada pelo Gemini (com instruções de objetividade e tratamento de saudações).
+- Fontes documentais consultadas (sem duplicatas, limitadas às 3 mais relevantes).
 - Similaridade dos trechos recuperados.
 
 O endpoint `/rag/status` confirmou:
@@ -884,7 +823,7 @@ O endpoint `/rag/status` confirmou:
 }
 ```
 
-Os resultados representam os testes realizados durante o desenvolvimento local. Alterações posteriores no código ou na base documental exigem novas validações.
+Os resultados representam os testes realizados durante o desenvolvimento. Alterações posteriores no código ou na base documental exigem novas validações.
 
 ---
 
@@ -900,7 +839,6 @@ O HidroBairro Sul é um projeto em desenvolvimento. Algumas funcionalidades são
 - Locais seguros e pontos de apoio não devem ser apresentados como abrigos oficiais sem validação dos órgãos responsáveis.
 - A IA não deve inventar medições, alertas, endereços, abrigos ou rotas seguras.
 - A integração com a API Java ainda está em desenvolvimento.
-- A publicação da API de IA no Render ainda está pendente.
 
 Para situações reais de emergência, os moradores devem acompanhar os alertas e orientações dos órgãos oficiais, especialmente a Defesa Civil e os serviços de emergência.
 
@@ -908,7 +846,7 @@ Para situações reais de emergência, os moradores devem acompanhar os alertas 
 
 # 👨‍💻 Desenvolvimento
 
-Projeto desenvolvido como parte da iniciativa **Global Solution — HidroBairro Sul**, utilizando tecnologias de Internet das Coisas e Inteligência Artificial.
+Projeto desenvolvido como parte da iniciativa **Global Solution HidroBairro Sul**, utilizando tecnologias de Internet das Coisas e Inteligência Artificial.
 
 ### Responsabilidades desta implementação
 
@@ -919,9 +857,10 @@ Projeto desenvolvido como parte da iniciativa **Global Solution — HidroBairro 
 - Desenvolvimento da API de Inteligência Artificial.
 - Organização da base documental do projeto.
 - Implementação da indexação e recuperação RAG.
-- Integração com o Google Gemini.
-- Testes locais da API e do assistente.
-- Preparação da publicação da API e da integração com Java.
+- Integração com o Google Gemini e ajuste do `SYSTEM_PROMPT.py` para respostas concisas.
+- Criação da interface web de testes (`Front_End_Test`) e publicação na Vercel.
+- Publicação da API de IA no Render e integração com o front-end.
+- Preparação da integração com Java.
 
 ---
 
@@ -934,9 +873,3 @@ Projeto desenvolvido por:
 - Mariana Xavier — Marixavq: https://github.com/Marixavq
 - Júlia Tiziotto — JúliaB: https://github.com/JuliaTButtler
 - Bruno Martins — Taikawaititi: https://github.com/Taikawaititi
-
----
-
-## 📄 Licença
-
-Projeto acadêmico desenvolvido para fins educacionais e de experimentação tecnológica.
